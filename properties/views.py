@@ -1,21 +1,22 @@
-from django.shortcuts import render
 from django.http import JsonResponse
-from .utils import get_all_properties
+from django.views.decorators.cache import cache_page # Correct import
+from .models import Property
 
+@cache_page(60 * 15) # Correct decorator
 def property_list(request):
     """
-    View to list all properties, returning JSON data and using
-    the low-level cache from the get_all_properties utility function.
+    View to list all properties, returning JSON data and
+    cached at the view level for 15 minutes.
     """
-    properties = get_all_properties()
+    properties = Property.objects.all()
     
     # We now convert the queryset objects to a list of dictionaries to make them JSON-serializable.
     data = [{
         'title': p.title,
         'description': p.description,
-        'price': str(p.price), # DecimalField needs to be converted to a string
+        'price': str(p.price),
         'location': p.location,
-        'created_at': p.created_at.isoformat(), # datetime object needs to be converted
+        'created_at': p.created_at.isoformat(),
     } for p in properties]
     
     return JsonResponse({'data': data}, safe=False)
