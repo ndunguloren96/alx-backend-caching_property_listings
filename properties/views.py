@@ -1,13 +1,11 @@
 from django.shortcuts import render
-from django.core.cache import cache
-from django.views.decorators.cache import cache_page
 from django.http import JsonResponse
-from .models import Property
-from .utils import get_all_properties # Add this import for Task 2
+from .utils import get_all_properties
 
 def property_list(request):
     """
-    View to list all properties, returning JSON data.
+    View to list all properties, returning JSON data and using
+    the low-level cache from the get_all_properties utility function.
     """
     properties = get_all_properties()
     
