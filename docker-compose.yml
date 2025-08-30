@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: alx_db_postgres
+    environment:
+      - POSTGRES_DB=alx_caching_db
+      - POSTGRES_USER=alx_user
+      - POSTGRES_PASSWORD=alx_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    container_name: alx_redis_cache
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
